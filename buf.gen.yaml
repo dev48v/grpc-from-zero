@@ -1,12 +1,17 @@
 # STEP 3 — Buf code-generation config.
-#   Buf reads proto/dictionary.proto and runs each plugin below to emit
-#   typed TypeScript into shared/gen. Both the server and the client
-#   import from that one folder, so we never hand-write the wire types.
+#   Buf reads proto/dictionary.proto and emits the SAME typed TypeScript
+#   into BOTH workspaces. We don't share a single shared/gen folder because
+#   monorepo deploy targets (Vercel for the client, Render Docker for the
+#   server) each work cleanest when their rootDir is self-contained.
 #
 #   Run with: npm run generate
 version: v2
 plugins:
   - local: protoc-gen-es
-    out: shared/gen
+    out: server/src/gen
+    opt:
+      - target=ts
+  - local: protoc-gen-es
+    out: client/src/gen
     opt:
       - target=ts

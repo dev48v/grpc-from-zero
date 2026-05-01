@@ -16,7 +16,7 @@ import {
   type Meaning,
   type Definition,
   type Phonetic,
-} from "../../shared/gen/dictionary_pb.js";
+} from "./gen/dictionary_pb.js";
 import {
   lookup,
   WordNotFoundError,

@@ -9,7 +9,7 @@ import { client } from "../connect";
 import type {
   Entry,
   WordOfTheDayResponse,
-} from "../../../shared/gen/dictionary_pb";
+} from "../gen/dictionary_pb";
 import { EntryView } from "../components/EntryView";
 
 const HISTORY_KEY = "wl.history";

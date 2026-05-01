@@ -10,7 +10,7 @@ import { client } from "../connect";
 import type {
   Entry,
   DefineResponse,
-} from "../../../shared/gen/dictionary_pb";
+} from "../gen/dictionary_pb";
 import { EntryView } from "../components/EntryView";
 import { pushHistory } from "./Home";
 

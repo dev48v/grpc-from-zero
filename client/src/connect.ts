@@ -10,7 +10,7 @@
 import { createClient } from "@connectrpc/connect";
 import { createConnectTransport } from "@connectrpc/connect-web";
 
-import { DictionaryService } from "../../shared/gen/dictionary_pb";
+import { DictionaryService } from "./gen/dictionary_pb";
 
 const baseUrl =
   (import.meta.env.VITE_RPC_URL as string | undefined) ??

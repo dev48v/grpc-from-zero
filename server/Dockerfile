@@ -26,7 +26,6 @@ RUN npm ci --workspace=server --include-workspace-root
 # Now copy the source we actually compile.
 COPY server/tsconfig.json ./server/
 COPY server/src ./server/src
-COPY shared ./shared
 
 RUN npm run -w server build
 
@@ -47,7 +46,7 @@ COPY --from=builder /app/server/dist ./server/dist
 
 EXPOSE 4000
 USER node
-CMD ["node", "server/dist/server/src/index.js"]
+CMD ["node", "server/dist/index.js"]
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
   CMD wget -qO- http://127.0.0.1:${PORT:-4000}/health || exit 1

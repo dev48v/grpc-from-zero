@@ -3,7 +3,7 @@
 //   The Entry type comes straight from shared/gen/dictionary_pb, so any
 //   schema change shows up here as a TS error first.
 
-import type { Entry } from "../../../shared/gen/dictionary_pb";
+import type { Entry } from "../gen/dictionary_pb";
 
 interface Props {
   entry: Entry;
