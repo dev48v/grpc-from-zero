@@ -1,0 +1,17 @@
+{
+  "name": "grpc-from-zero",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Day 26 of TechFromZero — Connect-RPC dictionary microservice with React UI",
+  "workspaces": ["server", "client"],
+  "scripts": {
+    "generate": "buf generate",
+    "build": "npm run -w server build && npm run -w client build",
+    "dev:server": "npm run -w server dev",
+    "dev:client": "npm run -w client dev"
+  },
+  "devDependencies": {
+    "@bufbuild/buf": "^1.45.0",
+    "@bufbuild/protoc-gen-es": "^2.2.2"
+  }
+}

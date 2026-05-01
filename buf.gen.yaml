@@ -1,0 +1,12 @@
+# STEP 3 — Buf code-generation config.
+#   Buf reads proto/dictionary.proto and runs each plugin below to emit
+#   typed TypeScript into shared/gen. Both the server and the client
+#   import from that one folder, so we never hand-write the wire types.
+#
+#   Run with: npm run generate
+version: v2
+plugins:
+  - local: protoc-gen-es
+    out: shared/gen
+    opt:
+      - target=ts
