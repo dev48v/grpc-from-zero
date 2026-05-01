@@ -1,0 +1,16 @@
+# Render Blueprint — auto-deploys the Connect-RPC server on the free tier.
+# Build context is the REPO ROOT so the Dockerfile can see both server/
+# and shared/gen/. dockerfilePath is relative to dockerContext.
+services:
+  - type: web
+    name: grpc-from-zero
+    env: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./server/Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
