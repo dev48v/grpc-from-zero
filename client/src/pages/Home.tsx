@@ -6,7 +6,10 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ConnectError } from "@connectrpc/connect";
 import { client } from "../connect";
-import type { Entry } from "../../../shared/gen/dictionary_pb";
+import type {
+  Entry,
+  WordOfTheDayResponse,
+} from "../../../shared/gen/dictionary_pb";
 import { EntryView } from "../components/EntryView";
 
 const HISTORY_KEY = "wl.history";
@@ -32,10 +35,10 @@ export function Home() {
     let cancelled = false;
     client
       .wordOfTheDay({})
-      .then((res) => {
+      .then((res: WordOfTheDayResponse) => {
         if (!cancelled) setWotd({ word: res.word, entry: res.entry });
       })
-      .catch((err) => {
+      .catch((err: unknown) => {
         if (!cancelled)
           setWotdError(
             err instanceof ConnectError ? err.message : "RPC failed"

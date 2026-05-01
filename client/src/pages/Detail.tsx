@@ -7,7 +7,10 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ConnectError, Code } from "@connectrpc/connect";
 import { client } from "../connect";
-import type { Entry } from "../../../shared/gen/dictionary_pb";
+import type {
+  Entry,
+  DefineResponse,
+} from "../../../shared/gen/dictionary_pb";
 import { EntryView } from "../components/EntryView";
 import { pushHistory } from "./Home";
 
@@ -32,7 +35,7 @@ export function Detail() {
 
     client
       .define({ word })
-      .then((res) => {
+      .then((res: DefineResponse) => {
         if (cancelled) return;
         if (res.entries.length === 0) {
           setState({ kind: "not-found", word });
@@ -41,7 +44,7 @@ export function Detail() {
         setState({ kind: "ok", entries: res.entries });
         pushHistory(word);
       })
-      .catch((err) => {
+      .catch((err: unknown) => {
         if (cancelled) return;
         if (err instanceof ConnectError && err.code === Code.NotFound) {
           setState({ kind: "not-found", word });
