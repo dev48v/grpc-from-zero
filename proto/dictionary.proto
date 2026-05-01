@@ -1,0 +1,79 @@
+// STEP 2 — The contract.
+//   This is the SOURCE OF TRUTH for the API. Both the Node server AND the
+//   React client will be CODE-GENERATED from this single file. If you
+//   need to add a field, you edit this and re-run `npm run generate`.
+//
+//   The Connect-RPC tooling (Buf + protoc-gen-es + protoc-gen-connect-es)
+//   reads this file and emits typed TypeScript on both ends.
+
+syntax = "proto3";
+
+package dictionary.v1;
+
+// A single dictionary entry, mirroring the shape returned by the free
+// dictionaryapi.dev. We expose just the fields a UI realistically renders.
+message Entry {
+  string word = 1;
+  string phonetic = 2;            // primary IPA, e.g. "/həˈləʊ/"
+  repeated Phonetic phonetics = 3;// alternates, sometimes with audio
+  repeated Meaning meanings = 4;  // grouped by part of speech
+  repeated string source_urls = 5;
+}
+
+message Phonetic {
+  string text = 1;
+  string audio = 2;               // mp3 URL or empty
+}
+
+message Meaning {
+  string part_of_speech = 1;      // "noun", "verb", "adjective", ...
+  repeated Definition definitions = 2;
+  repeated string synonyms = 3;
+  repeated string antonyms = 4;
+}
+
+message Definition {
+  string definition = 1;
+  string example = 2;             // optional usage sentence
+  repeated string synonyms = 3;
+  repeated string antonyms = 4;
+}
+
+// --- RPC messages --------------------------------------------------------
+
+message DefineRequest {
+  string word = 1;                // case-insensitive lookup
+}
+
+message DefineResponse {
+  // Most words have one entry; homographs (e.g. "bow") return multiple.
+  repeated Entry entries = 1;
+}
+
+message WordOfTheDayRequest {}
+
+message WordOfTheDayResponse {
+  string word = 1;                // the picked word
+  Entry entry = 2;                // its full definition
+}
+
+message HealthRequest {}
+
+message HealthResponse {
+  string status = 1;              // always "ok" if the RPC reaches us
+  string service = 2;             // "grpc-from-zero"
+}
+
+// --- Service definition --------------------------------------------------
+
+service DictionaryService {
+  // Look up a word and return all dictionary entries for it.
+  rpc Define(DefineRequest) returns (DefineResponse);
+
+  // Pick a deterministic-by-day word and return its full entry.
+  rpc WordOfTheDay(WordOfTheDayRequest) returns (WordOfTheDayResponse);
+
+  // Trivial heartbeat — exists so the UI has something cheap to call
+  // when the page loads, just to wake a sleeping Render free-tier dyno.
+  rpc Health(HealthRequest) returns (HealthResponse);
+}
